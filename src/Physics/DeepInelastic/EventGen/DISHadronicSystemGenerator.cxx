@@ -27,6 +27,7 @@
 #include "Framework/Utils/PhysUtils.h"
 #include "Physics/DeepInelastic/EventGen/DISHadronicSystemGenerator.h"
 
+
 using namespace genie;
 using namespace genie::controls;
 using namespace genie::constants;
@@ -125,7 +126,11 @@ void DISHadronicSystemGenerator::SimulateFormationZone(
     const TLorentzVector & p4 = *(p->P4());
     double ct0=0.;
     pdg::IsNucleon(pdgc) ? ct0=fct0nucleon : ct0=fct0pion;
-    double fz = phys::FormationZone(m,p4,p3hadr,ct0,fK);
+    
+    //double fz = phys::FormationZone(m,p4,p3hadr,ct0,fK);
+
+
+    double fz = phys::FormationZoneLundString(evrec, p);
 
     //-- Apply the formation zone step
 
