@@ -26,7 +26,7 @@
 #include "Framework/Utils/PrintUtils.h"
 #include "Framework/Utils/PhysUtils.h"
 #include "Physics/DeepInelastic/EventGen/DISHadronicSystemGenerator.h"
-
+#include "Physics/DeepInelastic/EventGen/FormationZoneI.h"
 
 using namespace genie;
 using namespace genie::controls;
@@ -97,10 +97,6 @@ void DISHadronicSystemGenerator::SimulateFormationZone(
   // zone to the daughters
   this->PreHadronTransportDecays(evrec);
 
-  // Get hadronic system's 3-momentum
-  GHepParticle * hadronic_system = evrec->FinalStateHadronicSystem();
-  TVector3 p3hadr = hadronic_system->P4()->Vect(); // (px,py,pz)
-
   // Loop over GHEP and set the formation zone to the right particles
   // Limit the maximum formation zone so that particles escaping the
   // nucleus are placed right outside...
@@ -121,16 +117,7 @@ void DISHadronicSystemGenerator::SimulateFormationZone(
     LOG("DISHadronicVtx", pINFO)
       << "Applying formation-zone to " << p->Name();
 
-    double m = p->Mass();
-    int pdgc = p->Pdg();
-    const TLorentzVector & p4 = *(p->P4());
-    double ct0=0.;
-    pdg::IsNucleon(pdgc) ? ct0=fct0nucleon : ct0=fct0pion;
-    
-    //double fz = phys::FormationZone(m,p4,p3hadr,ct0,fK);
-
-
-    double fz = phys::FormationZoneLundString(evrec, p);
+    double fz = fFormationZoneModel->FormationZone(evrec, p);
 
     //-- Apply the formation zone step
 
@@ -179,6 +166,7 @@ void DISHadronicSystemGenerator::LoadConfig(void)
 {
   fHadronizationModel = 0;
   fPreINukeDecayer    = 0;
+  fFormationZoneModel = 0;
 
   //-- Get the requested hadronization model
   fHadronizationModel =
@@ -198,13 +186,9 @@ void DISHadronicSystemGenerator::LoadConfig(void)
   GetParam( "NUCL-R0", fR0 ) ;
   GetParam( "NUCL-NR", fNR ) ;
 
-  //-- Get parameters controlling the formation zone simulation
-  GetParam( "FZONE-ct0pion", fct0pion ) ;
-  GetParam( "FZONE-ct0nucleon",fct0nucleon ) ;
-  GetParam( "FZONE-KPt2", fK ) ;
-
-  LOG("DISHadronicVtx", pDEBUG) << "ct0pion     = " << fct0pion    << " fermi";
-  LOG("DISHadronicVtx", pDEBUG) << "ct0nucleon  = " << fct0nucleon << " fermi";
-  LOG("DISHadronicVtx", pDEBUG) << "K(pt^2) = " << fK;
+  //-- Get the requested formation zone model
+  fFormationZoneModel =
+     dynamic_cast<const FormationZoneI *> (this->SubAlg("FormationZoneModel"));
+  assert(fFormationZoneModel);
 }
 //____________________________________________________________________________

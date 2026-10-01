@@ -10,5 +10,8 @@
 #pragma link C++ class genie::DISHadronicSystemGenerator;
 #pragma link C++ class genie::DISInteractionListGenerator;
 #pragma link C++ class genie::DISKinematicsGenerator;
+#pragma link C++ class genie::FormationZoneI;
+#pragma link C++ class genie::StandardFZModel;
+#pragma link C++ class genie::LundStringFZModel;
 
 #endif

@@ -13,9 +13,7 @@ Name                Type    Opt   Comment                                       
 Hadronizer          alg     No
 PreTransportDecayer alg     No
 FilterPreFragm      bool    No
-FZONE-ct0pion       double  No
-FZONE-ct0nucleon    double  No
-FZONE-Kpt2          double  No
+FormationZoneModel  alg     No    Formation zone model (StandardFZModel or LundStringFZModel)
 NUCL-R0             double  No                                                              CommonParam[NUCL]
 NUCL-NR             double  No                                                              CommonParam[NUCL]
 -->
@@ -29,13 +27,13 @@ NUCL-NR             double  No                                                  
 
      <!--
           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          Parameters relevant to formation zone simulation
-          - ct0 is the formation time times the speed of light (given in fm)
-          - KPt2 is the parameter multiplying pT2 in formation zone calc.
+          Formation zone model. Available options:
+            genie::StandardFZModel/Default      GENIE standard model (fixed formation zone)
+            genie::StandardFZModel/Exp          GENIE standard model, sampled from an exponential
+            genie::LundStringFZModel/Default    Lund string model (fixed formation zone)
+            genie::LundStringFZModel/Exp        Lund string model, sampled from an exponential
      -->
-     <param type="double" name="FZONE-ct0pion">       0.342   </param>
-     <param type="double" name="FZONE-ct0nucleon">    2.300   </param>
-     <param type="double" name="FZONE-KPt2">          0.0     </param>
+     <param type="alg"  name="FormationZoneModel">  genie::StandardFZModel/Default         </param>
 
   </param_set>
 

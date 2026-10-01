@@ -20,23 +20,14 @@
 
 #include <TLorentzVector.h>
 
-#include "Framework/GHEP/GHepRecord.h"
-
 namespace genie {
 namespace utils {
 
 namespace phys
 {
-
-  double SampleHadronizationLength(double tau, double beta);
   // Formation zone in fm
   double FormationZone(
      double m, const TLorentzVector & p, const TVector3 & p3hadr, double ct0 /*in fm*/, double K);
-
-  // Formation zone in fm
-  double FormationZoneLundString(
-    GHepRecord *  event, GHepParticle * part_had);
-     //double m, const TLorentzVector & p, const TVector3 & p3hadr, double ct0 /*in fm*/, double K);
 
   // Longitudinal to transverse cross section ratio (R) parametrizations
   double R99118   (double x, double Q2); ///< PRL 98, 142301, 2007

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<alg_conf>
+
+<!--
+Configuration for the Lund string formation zone model (C. Zhang):
+  fz = ( M + nu + sqrt(nu^2 + Q^2) - 2 * nu * z_h ) / ( 2 * kappa )
+
+Configurable Parameters:
+..........................................................................................................
+Name                 Type    Optional   Comment                                              Default
+..........................................................................................................
+FZONE-StringTension  double  No         string tension kappa (GeV/fm)
+SampleExponential    bool    Yes        sample fz from an exponential with the above mean    false
+-->
+
+  <param_set name="Default">
+     <param type="double" name="FZONE-StringTension"> 1.0     </param>
+     <param type="bool"   name="SampleExponential">   false   </param>
+  </param_set>
+
+  <param_set name="Exp">
+     <param type="bool"   name="SampleExponential">   true    </param>
+  </param_set>
+
+</alg_conf>
