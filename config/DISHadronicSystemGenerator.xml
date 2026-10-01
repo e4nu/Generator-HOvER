@@ -32,6 +32,7 @@ NUCL-NR             double  No                                                  
             genie::StandardFZModel/Exp          GENIE standard model, sampled from an exponential
             genie::LundStringFZModel/Default    Lund string model (fixed formation zone)
             genie::LundStringFZModel/Exp        Lund string model, sampled from an exponential
+            genie::StandardFZModel/NoFZ         no formation zone
      -->
      <param type="alg"  name="FormationZoneModel">  genie::StandardFZModel/Default         </param>
 

@@ -27,4 +27,10 @@ SampleExponential    bool    Yes        sample fz from an exponential with the a
      <param type="bool"   name="SampleExponential">   true    </param>
   </param_set>
 
+  <!-- No formation zone: hadrons start the intranuclear cascade at the interaction vertex -->
+  <param_set name="NoFZ">
+     <param type="double" name="FZONE-ct0pion">       0.0     </param>
+     <param type="double" name="FZONE-ct0nucleon">    0.0     </param>
+  </param_set>
+
 </alg_conf>
