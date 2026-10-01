@@ -27,6 +27,8 @@ namespace utils {
 
 namespace phys
 {
+
+  double SampleHadronizationLength(double tau, double beta);
   // Formation zone in fm
   double FormationZone(
      double m, const TLorentzVector & p, const TVector3 & p3hadr, double ct0 /*in fm*/, double K);

@@ -10,12 +10,26 @@
 
 #include <TMath.h>
 #include <TVector3.h>
+#include <random>
+#include <cmath>
 
 #include "Framework/Utils/PhysUtils.h"
 #include "Framework/Messenger/Messenger.h"
 #include "Framework/GHEP/GHepParticle.h"
 
 const double Mp = 0.94; // mass of proton GeV/c2
+
+double genie::utils::phys::SampleHadronizationLength(double tau,
+                                 double beta)
+{
+    static thread_local std::mt19937 rng(std::random_device{}());
+
+    std::exponential_distribution<double> dist(1.0 / tau);
+
+    double t = dist(rng); // mean = tau
+
+    return beta * t;     // fm
+}
 
 //___________________________________________________________________________
 double  genie::utils::phys::FormationZone(
@@ -31,7 +45,15 @@ double  genie::utils::phys::FormationZone(
   double   P   = p4.P();               //           |p|
   double   Pt  = p3.Pt(p3hadr);        //           pT
   double   Pt2 = Pt*Pt;                //           pT^2
-  double   fz  = P*ct0*m/(m2+K*Pt2);   //           formation zone, in fm
+  //double   fz  = P*ct0*m/(m2+K*Pt2);   //           formation zone, in fm
+  double   fz_mean  = P*ct0*m/(m2+K*Pt2);   //           formation zone, in fm
+
+  // convert mean length -> mean lifetime
+  double E = p4.E();
+  double beta = P/E;
+  double tau = fz_mean / (beta);
+  double fz = SampleHadronizationLength(tau, beta);
+
 
   LOG("PhysUtil", pNOTICE)
       << "Formation zone(|P| = " << P << " GeV, Pt = " << Pt
@@ -46,14 +68,10 @@ double  genie::utils::phys::FormationZoneLundString(
    GHepParticle * part_had)
 {
 
-  //double nv = fsl - Ev;
 
   GHepParticle * neutrino = event->Probe();
   GHepParticle * fsl = event->FinalStatePrimaryLepton();
-  //double nu  = fsl->Energy()-neutrino->Energy();
   double nu  = neutrino->GetP4()->E() - fsl->GetP4()->E();
-
-  //fsl->GetP4()->E()
   
 
   Interaction * interaction = event->Summary();
@@ -63,26 +81,16 @@ double  genie::utils::phys::FormationZoneLundString(
   double W = kine.W(); 
   
   double zh = part_had->GetP4()->E()*1.0/nu;
-  double fz  = 0.5*( Mp+nu+sqrt(nu*nu+Q2)-2*nu*zh );
+  //double fz  = 0.5*( Mp+nu+sqrt(nu*nu+Q2)-2*nu*zh );
+  double fz_mean  = 0.5*( Mp+nu+sqrt(nu*nu+Q2)-2*nu*zh );
 
-// m -> hadon mass (on-shell)
-// p -> hadron momentum 4-vector (Lab)
-// p3hadr -> hadronic-system momentum 3-vector (Lab)
+  double beta = part_had->GetP4()->P()/part_had->GetP4()->E();
+  double tau = fz_mean / (beta);
+  double fz = SampleHadronizationLength(tau, beta);
 
-  /*
-
-  TVector3 p3  = p4.Vect();            // hadron's: p (px,py,pz)
-  double   m2  = m*m;                  //           m^2
-  double   P   = p4.P();               //           |p|
-  double   Pt  = p3.Pt(p3hadr);        //           pT
-  double   Pt2 = Pt*Pt;                //           pT^2
-  double   fz  = P*ct0*m/(m2+K*Pt2);   //           formation zone, in fm
-  */
 
   LOG("PhysUtil", pNOTICE)
       << "Formation zone Lund String" 
-      //<< "(|P| = " << P << " GeV, Pt = " << Pt
-      //<< " GeV, ct0 = " << ct0 << " fm, K = " << K << ") = " 
       << fz << " fm";
 
   return fz;
