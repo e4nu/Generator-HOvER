@@ -8,7 +8,8 @@
           produced in the hadronization of the DIS hadronic system.
           The formation zone returned to the caller is either that mean
           value or, if SampleExponential is set, a value sampled from an
-          exponential distribution with that mean.
+          exponential distribution with that mean. A negative mean
+          formation zone is set to 0.
 
 \author   J. Tena Vidal <julia.tena-vidal@ific.uv.es>
           Universitat de Valencia

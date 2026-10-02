@@ -38,6 +38,15 @@ double FormationZoneI::FormationZone(
 {
   double fz = this->MeanFormationZone(event, hadron);
 
+  // A negative formation zone would move the hadron backwards along its
+  // direction of flight (e.g. the Lund string model for z_h ~> 1)
+  if( fz < 0. ) {
+    LOG("FormationZone", pINFO)
+      << "Negative formation zone for " << hadron->Name() << " (" << fz
+      << " fm) - Setting it to 0";
+    fz = 0.;
+  }
+
   if( fSampleExponential && fz > 0. ) {
     RandomGen * rnd = RandomGen::Instance();
     fz = rnd->RndHadro().Exp(fz);
