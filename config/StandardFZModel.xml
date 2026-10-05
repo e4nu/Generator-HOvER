@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<alg_conf>
+
+<!--
+Configuration for GENIE's standard formation zone model:
+  fz = |p| * ct0 * m / (m^2 + K * pT^2)
+
+Configurable Parameters:
+..........................................................................................................
+Name                 Type    Optional   Comment                                              Default
+..........................................................................................................
+FZONE-ct0pion        double  No         c * formation time for pions (fm)
+FZONE-ct0nucleon     double  No         c * formation time for nucleons (fm)
+FZONE-KPt2           double  No         parameter multiplying pT^2
+SampleExponential    bool    Yes        sample fz from an exponential with the above mean    false
+-->
+
+  <param_set name="Default">
+     <param type="double" name="FZONE-ct0pion">       0.342   </param>
+     <param type="double" name="FZONE-ct0nucleon">    2.300   </param>
+     <param type="double" name="FZONE-KPt2">          0.0     </param>
+     <param type="bool"   name="SampleExponential">   false   </param>
+  </param_set>
+
+  <param_set name="Exp">
+     <param type="bool"   name="SampleExponential">   true    </param>
+  </param_set>
+
+  <!-- No formation zone: hadrons start the intranuclear cascade at the interaction vertex -->
+  <param_set name="NoFZ">
+     <param type="double" name="FZONE-ct0pion">       0.0     </param>
+     <param type="double" name="FZONE-ct0nucleon">    0.0     </param>
+  </param_set>
+
+</alg_conf>

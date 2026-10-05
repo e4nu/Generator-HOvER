@@ -52,6 +52,8 @@
    <config alg="genie::COHHadronicSystemGenerator">      COHHadronicSystemGenerator.xml      </config>
    <config alg="genie::DFRHadronicSystemGenerator">      DFRHadronicSystemGenerator.xml      </config>
    <config alg="genie::DISHadronicSystemGenerator">      DISHadronicSystemGenerator.xml      </config>
+   <config alg="genie::StandardFZModel">                  StandardFZModel.xml                 </config>
+   <config alg="genie::LundStringFZModel">                LundStringFZModel.xml               </config>
    <config alg="genie::RESHadronicSystemGenerator">      RESHadronicSystemGenerator.xml      </config>
    <config alg="genie::RSPPHadronicSystemGenerator">     RSPPHadronicSystemGenerator.xml     </config>
    <config alg="genie::SKHadronicSystemGenerator">       SKHadronicSystemGenerator.xml       </config>

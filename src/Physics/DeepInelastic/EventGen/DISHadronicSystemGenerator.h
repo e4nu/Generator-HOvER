@@ -23,6 +23,8 @@
 
 namespace genie {
 
+class FormationZoneI;
+
 class DISHadronicSystemGenerator : public HadronicSystemGenerator {
 
 public :
@@ -45,13 +47,11 @@ private:
   void LoadConfig (void);
 
   const EventRecordVisitorI * fHadronizationModel;
+  const FormationZoneI *      fFormationZoneModel;
 
   bool   fFilterPreFragmEntries;
   double fR0;          ///< param controling nuclear size
   double fNR;          ///< how far beyond the nuclear boundary does the particle tracker goes?
-  double fct0pion;     ///< formation zone (c * formation time) - for pions
-  double fct0nucleon;  ///< formation zone (c * formation time) - for nucleons
-  double fK;           ///< param multiplying pT^2 in formation zone calculation
 };
 
 }      // genie namespace
