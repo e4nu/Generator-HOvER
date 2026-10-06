@@ -89,9 +89,15 @@ namespace {
   // process ID codes. Note that the latter are distinct from GENIE's own
   // process labeling scheme.
   //
-  // NOTE: NuHepMC 0.9.0 includes a convention that EM processes should have
-  // negative process IDs. For now, they are omitted from the map.
+  // NuHepMC 0.9.0 includes a convention that EM processes should have
+  // negative process IDs. Electromagnetic scattering is a neutral-current
+  // process, so the EM entries use the negative of the NC (X50) codes.
   const std::map< std::pair<SType,IType>, int > NUHEPMC_PROC_MAP = {
+
+    { { SType::kScQuasiElastic, IType::kIntEM }, -250 }, // QEL-EM
+    { { SType::kScMEC, IType::kIntEM }, -350 }, // MEC-EM
+    { { SType::kScResonant, IType::kIntEM }, -450 }, // RES-EM
+    { { SType::kScDeepInelastic, IType::kIntEM }, -650 }, // DIS-EM
 
     { { SType::kScUnknown, IType::kIntNull }, NUHEPMC_PROC_UNKNOWN }, // Unknown
     { { SType::kScAMNuGamma, IType::kIntWeakNC }, 751 }, // AM-NUGAMMA
