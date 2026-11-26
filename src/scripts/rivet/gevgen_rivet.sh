@@ -105,6 +105,16 @@ IFS=',' read -r -a ELIST <<< "$ENERGIES"
 # ---------------------------------------------------------------------------------------------
 # One job: gevgen -> named pipe -> rivet. Writes "ok" or "failed: <reason>" to the job's status file.
 
+# Stop processes and their children (the --keep-events copy runs cat | tee | gzip in a subshell)
+stop() {
+  local pid
+  for pid in "$@"; do
+    [ -n "$pid" ] || continue
+    pkill -P "$pid" 2>/dev/null
+    kill "$pid" 2>/dev/null
+  done
+}
+
 run_job() {
   local energy=$1 seed=$2 dir=$3
   mkdir -p "$dir" && cd "$dir" || return 1
@@ -135,20 +145,20 @@ run_job() {
       wait $gevgen_pid; gevgen_status=$?
       if [ $gevgen_status -ne 0 ]; then
         reason="gevgen exit $gevgen_status"
-        kill $rivet_pid $tee_pid 2>/dev/null
+        stop $rivet_pid $tee_pid
       fi
     fi
     if [ -z "$rivet_status" ] && ! kill -0 $rivet_pid 2>/dev/null; then
       wait $rivet_pid; rivet_status=$?
       if [ -z "$gevgen_status" ]; then   # rivet stopped before gevgen finished
         [ -z "$reason" ] && reason="rivet exit $rivet_status before the end of the events"
-        kill $gevgen_pid $tee_pid 2>/dev/null
+        stop $gevgen_pid $tee_pid
       fi
     fi
     [ -n "$gevgen_status" ] && [ -n "$rivet_status" ] && break
     if [ "$TIMEOUT" -gt 0 ] && [ $(( $(date +%s) - start )) -gt "$TIMEOUT" ]; then
       reason="timeout after $TIMEOUT s"
-      kill $gevgen_pid $rivet_pid $tee_pid 2>/dev/null
+      stop $gevgen_pid $rivet_pid $tee_pid
     fi
     sleep 2
   done
